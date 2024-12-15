@@ -14,14 +14,6 @@ class TagSeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = Category::all();
-
-        // Loop through each category and create tags for it
-        foreach ($categories as $category) {
-            // Create 5 tags for each category
-            Tag::factory()->count(5)->create([
-                'category_id' => $category->id,  // Associate the tag with the current category
-            ]);
-        }
+        Tag::factory(12)->create();
     }
 }

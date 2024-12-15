@@ -16,9 +16,12 @@ class TagFactory extends Factory
      */
     public function definition(): array
     {
-        // $categories = ['Technology', 'Lifestyle', 'Entertainment', 'Education'];
+        $tags = [
+            'Anime', 'Programming', 'Web Development', 'Music', 'Games', 'Manga',
+            'Technology', 'Design', 'Travel', 'Food', 'Sports', 'Education'
+        ];
         return [
-            'name' => $this->faker->word,  // Generate a random tag name
+            'name' => $tags[$this->faker->unique()->numberBetween(0, count($tags) - 1)],  // Generate a unique random tag nameGenerate a random tag name
         ];
     }
 }

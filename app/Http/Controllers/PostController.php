@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Models\Category;
 use Auth;
 
 class PostController extends Controller
@@ -15,7 +16,7 @@ class PostController extends Controller
     public function index()
     {
         return view('blog.index', [
-            'posts' => Auth::user()->posts
+            'posts' => Post::all()
         ]);
     }
 
@@ -24,7 +25,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('blog.create', [
+            "categories" => Category::all(),
+            "tags" => Tag::all(),
+        ]);
     }
 
     /**
@@ -68,7 +72,16 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $post = Post::find($id);
+        // $this->authorize('update', [Auth::user(), Post::find($id)]);
+        if (!Auth::user()->can('update', [$post])) {
+            abort(403);
+        }
+        return view('blog.edit', [
+            'post' => $post,
+            'categories' => Category::all(),
+            'tags' => Tag::all()
+             ]);
     }
 
     /**
@@ -76,7 +89,28 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+       $request->validate([
+            'title' => "required|min:3",
+            'content' => "required|min:3",
+            'category' => "required",
+        ]);
+
+       $post = Post::find($id);
+
+        $post->update([
+            'title' => $request->title,
+            'content' => $request->content,
+            'category_id' => $request->category,
+        ]);
+
+        if ($request->has('tags')) {
+            foreach($request->tags as $id) {
+                $post->tags()->attach($id);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Blog updated successfully.');
+
     }
 
     /**
@@ -84,6 +118,13 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $post = Post::find($id);
+        if ($post) {
+            $post->delete();
+        } else {
+            return redirect()->back()->with('failed', 'Blog not found.');
+        }
+
+        return redirect()->route('post.index')->with('success', 'Blog deleted successfully.');
     }
 }

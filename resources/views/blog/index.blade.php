@@ -8,6 +8,9 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                	<a href="{{ route('post.create') }}">
+                		<x-primary-button>Create new blog</x-primary-button>
+                	</a>
                 	<div class="flex items-start flex-col ">
                 	@foreach($posts as $post)
                 	<a href="{{ route('post.show', $post->id) }}" class="hover:bg-yellow-50 w-full p-4 rounded cursor-pointer">

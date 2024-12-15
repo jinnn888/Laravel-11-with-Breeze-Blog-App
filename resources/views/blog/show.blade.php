@@ -32,6 +32,26 @@
 					<p>
 						{!! $post->content !!}
 					</p>
+					<hr class="my-6 h-0.5 border-t-0 bg-neutral-100" />
+					<h1 class="text-lg">Comments ({{ count($post->comments) }})</h1>
+					@foreach($post->comments as $comment)
+						<div class="p-2 mb-4 flex flex-col flex-wrap">
+							<h2 class="text-sm text-teal-500">{{ $comment->user->name }} {{ $post->user_id == $comment->user->id ? '(Author)': ''}}  </h2>
+							<p>{{ $comment->content }}</p>
+						</div>
+					@endforeach
+
+
+					<form action="{{ route('comment.store') }}" method="POST">
+						@csrf
+						<x-input-label>Comment</x-input-label>
+						<input name="post_id" type="hidden" value="{{ $post->id }}">
+						<textarea name="content" class="w-full rounded shadow-sm border-gray-500" id="" placeholder="Leave a comment?"></textarea>
+						<x-primary-button type="submit">Send</x-primary-button>
+					</form>
+
+					
+
 				</div>
 			</div>
 		</div>

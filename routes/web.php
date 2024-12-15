@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 use App\Models\Category;
 
 Route::get('/', function () {
@@ -28,5 +29,8 @@ Route::get('category-single/{category}', [CategoryController::class, 'getSingle'
 
 // Post 
 Route::resource('post', PostController::class);
+
+// Comment
+Route::resource('comment', CommentController::class);
 
 require __DIR__.'/auth.php';
